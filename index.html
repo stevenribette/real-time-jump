@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <link href="css/style.css" rel="stylesheet">
+        <script src="js/script.js"></script>
+        <script src="jquery/jquery.js"></script>
+        <title>JUMP</title>
+    </head>
+
+    <body>
+        <div id="gamescreen">
+            <img id="p1" class="player" src="img/1.png">
+            <img id="p2" class="player reverse" src="img/1.png">
+        </div>
+    </body>
+    <script>
+        //steven = 255062
+        //pol = 319204
+        var pl = [255062,319204];
+        var k = parseInt($_GET('k'));
+        var action = false;
+        var url = "http://syllab.com/PTRE839/";
+        var player = pl.indexOf(k)+1;
+        var player2;
+        if(player==1){player2=2;}else{player2=1;}
+        var k2 = pl[player2-1];
+        if(pl.indexOf(k) > -1){
+            document.addEventListener("keyup", function(event) {
+                action = detectMove(event,player,player2);
+            });
+            get();
+        }
+    </script>
+</html>

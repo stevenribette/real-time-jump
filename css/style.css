@@ -1,0 +1,23 @@
+#gamescreen{
+    height:700px;
+    width: 700px;
+    background-color: grey;
+}
+.player{
+    display: inline-block;
+    position: relative;
+    left:0;
+    bottom: -600px;
+}
+#p2{
+    float:right;
+    left:0px;
+}
+.reverse{
+    -moz-transform: scaleX(-1);
+    -o-transform: scaleX(-1);
+    -webkit-transform: scaleX(-1);
+    transform: scaleX(-1);
+    filter: FlipH;
+    -ms-filter: "FlipH";
+}
