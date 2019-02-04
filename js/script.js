@@ -15,7 +15,12 @@ function $_GET(param) {
 function get(){
     setTimeout(function(){
         $.get(url+"msgs?k="+k+"&timeout=1", function(data,status){
-            console.log(JSON.parse(data.data));
+            da = JSON.parse(data.data);
+            var x = $("#p"+player2).position();
+            console.log(da);
+            if(da[1]!=x.left || da[2]!=x.top){
+                move(player2,da[0]);
+            }
             get();
         });
     }, 1000);
@@ -42,7 +47,7 @@ function detectMove(event,player,player2){
     }
     if (event.keyCode === 81) {
         //left
-        post(x,0);
+        post(x,"-");
         $('#p'+player).addClass('reverse');
         x.left-=100;
         if(x.left>0){
@@ -52,7 +57,7 @@ function detectMove(event,player,player2){
     }
     if (event.keyCode === 68) {
         //right
-        post(x,1);
+        post(x,"+");
         $('#p'+player).removeClass('reverse');
         x.left+=100;
         if(x.left<700){
@@ -66,7 +71,6 @@ function detectMove(event,player,player2){
     }else if(x.left<=x2.left){
 
     }
-    return false;
     
 }
 function move(player,pos){
