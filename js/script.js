@@ -13,93 +13,72 @@ function $_GET(param) {
 	return vars;
 }
 function get(){
-    console.log("yee");
     setTimeout(function(){
         $.get(url+"msgs?k="+k+"&timeout=1", function(data,status){
-            da = JSON.parse(data.data);
-            var x = $("#p"+player2).position();
+            da = data.data.replace(/\\/g, '');
+            da = JSON.parse(da);
             console.log(da);
-            if(da.left!=x.left || da.top!=x.top){
-                move(player2,da.direction);
+            time = Date.now();
+            if(da.time > time-10000 && da.turn == turn+1){
+                nbAllum-=da.num;
+                if(nbAllum<=0){
+                    end(false);
+                }else{
+                    turn=true;
+                    nbTurn++;
+                }
             }
             get();
         });
-    }, 1000);
+    }, 500);
     
 }
-function post(pos,x){
+function post(x, nbTurn){
     var time = Date.now();
-    data = JSON.stringify({ direction: x, left: pos.left, top: pos.top, time: time });
+    obj = { num: x, turn: nbTurn, time: time };
+    data = JSON.stringify(obj);
     $.post(url+"msgs?k="+k+"&to="+k2+"&data="+data,
     function(result){
         
     });
-    console.log(data);
 }
-function detectMove(event,player,player2){
-    var x = $("#p"+player).position();
-    var x2 = $("#p"+player2).position();
-    if (event.keyCode === 90) {
-        //up
-        return true;
-    }
-    if (event.keyCode === 83) {
-        //down
-        return true;
-    }
-    if (event.keyCode === 81) {
-        //left
-        post(x,0);
-        $('#p'+player).addClass('reverse');
-        x.left-=100;
-        if(x.left>0){
-            move(player,0);
+function detectMove(event){
+    if(turn == true){
+        console.log("nyess");
+        all = 0;
+        if (event.keyCode === 49) {
+            all = 1;
         }
-        return true;
-    }
-    if (event.keyCode === 68) {
-        //right
-        post(x,1);
-        $('#p'+player).removeClass('reverse');
-        x.left+=100;
-        if(x.left<700){
-            move(player,1);
+        if (event.keyCode === 50) {
+            all = 2;
         }
-        return true;
+        if (event.keyCode === 51) {
+            all = 3;
+        }
+        if(all!=0){
+            nbTurn++;
+            nbAllum-=all;
+            if(nbAllum<=0){
+                end(true);
+            }else{
+                post(all,nbTurn);
+                afficher();
+                turn = false;
+            }
+        }
     }
-    
-    if(x.left>=x2.left){
-
-    }else if(x.left<=x2.left){
-
-    }
-    
 }
-function move(player,pos){
-    if(pos == 0){
-        pos = "-";
+function afficher(){
+    e = "";
+    for(x=0;x<nbAllum;x++){
+        e+="<div class='black'></div>";
     }
-    if(pos == 1){
-        pos = "+";
+    $('#gamescreen').html(e);
+}
+function end(b){
+    if(b==true){
+        $('#gamescreen').html("WINNER"); 
+    }else if(b==false){
+        $('#gamescreen').html("LOSER");
     }
-    $('#p'+player).animate({left: pos+"=100"}, 300);
-    setTimeout(function(){
-        $('#p'+player).attr('src','img/2.png');
-    }, 50);
-    setTimeout(function(){
-        $('#p'+player).attr('src','img/3.png');
-    }, 100);
-    setTimeout(function(){
-        $('#p'+player).attr('src','img/4.png');
-    }, 150);
-    setTimeout(function(){
-        $('#p'+player).attr('src','img/3.png');
-    }, 200);
-    setTimeout(function(){
-        $('#p'+player).attr('src','img/2.png');
-    }, 250);
-    setTimeout(function(){
-        $('#p'+player).attr('src','img/1.png');
-        action = false;
-    }, 300);
 }

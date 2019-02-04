@@ -5,13 +5,12 @@
         <link href="css/style.css" rel="stylesheet">
         <script src="js/script.js"></script>
         <script src="jquery/jquery.js"></script>
-        <title>JUMP</title>
+        <title>ALLUMETTE</title>
     </head>
 
     <body>
         <div id="gamescreen">
-            <img id="p1" class="player" src="img/1.png">
-            <img id="p2" class="player reverse" src="img/1.png">
+
         </div>
     </body>
     <script>
@@ -19,15 +18,21 @@
         //pol = 319204
         var pl = [255062,319204];
         var k = parseInt($_GET('k'));
-        var action = false;
+        var turn = false;
+        var nbTurn = 0;
+        var nbAllum = 10;
         var url = "http://syllab.com/PTRE839/";
         var player = pl.indexOf(k)+1;
         var player2;
         if(player==1){player2=2;}else{player2=1;}
         var k2 = pl[player2-1];
         if(pl.indexOf(k) > -1){
+            afficher();
+            if(pl.indexOf(k)==0){
+                turn = true;
+            }
             document.addEventListener("keyup", function(event) {
-                action = detectMove(event,player,player2);
+                detectMove(event,player,player2);
             });
             get();
         }
